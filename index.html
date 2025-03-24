@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RaviNovus Tech - Innovative Digital Solutions</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <!-- Three.js for 3D effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-purple': '#2D1B69',
+                        'darker-purple': '#1A103F',
+                        'dark-green': '#0F4C3A',
+                        'darker-green': '#0A3327'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #121212;
+            color: #f8f8f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #9333ea, #10b981);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .nav-gradient {
+            background: linear-gradient(90deg, rgba(45, 27, 105, 0.95), rgba(15, 76, 58, 0.95));
+        }
+        
+        .hero-bg {
+            background: radial-gradient(circle at center, rgba(45, 27, 105, 0.7) 0%, rgba(18, 18, 18, 0.7) 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.6;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 18, 18, 0.5);
+            z-index: -1;
+        }
+        
+        .section-video-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-3d {
+            transition: transform 0.5s ease;
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+        }
+        
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .service-card {
+            background: rgba(26, 16, 63, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .team-card {
+            background: rgba(10, 51, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-15px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .whatsapp-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+        
+        /* Team section animations */
+        .team-image-container {
+            transition: all 0.5s ease;
+            box-shadow: 0 0 20px rgba(137, 66, 255, 0.5);
+            animation: pulse-shadow 3s infinite alternate;
+        }
+
+        .team-image {
+            transition: all 0.8s ease;
+        }
+
+        .team-card:hover .team-image {
+            transform: scale(1.1);
+        }
+
+        .team-card:hover .team-image-container {
+            box-shadow: 0 0 30px rgba(137, 66, 255, 0.8);
+        }
+
+        .team-image-overlay {
+            transition: all 0.5s ease;
+        }
+
+        .team-card:hover .team-image-overlay {
+            opacity: 0;
+        }
+
+        .social-icon {
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .team-card:hover .social-icon {
+            transform: translateY(-5px);
+        }
+
+        @keyframes pulse-shadow {
+            0% {
+                box-shadow: 0 0 10px rgba(137, 66, 255, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 25px rgba(137, 66, 255, 0.8);
+            }
+        }
+        
+        /* Modal styles */
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-content.active {
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 3D Background Canvas -->
+    <div id="canvas-container"></div>
+    
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/923180986017" target="_blank" class="whatsapp-btn whatsapp-pulse">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+    
+    <!-- Navbar -->
+    <nav class="nav-gradient fixed w-full z-50 px-4 py-3 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-bold tracking-wider">
+                    <span class="gradient-text">RaviNovus</span> Tech
+                </h1>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="hover:text-purple-400 transition-colors">Home</a>
+                <a href="#services" class="hover:text-purple-400 transition-colors">Services</a>
+                <a href="#about" class="hover:text-purple-400 transition-colors">About</a>
+                <a href="#team" class="hover:text-purple-400 transition-colors">Team</a>
+                <a href="#contact" class="hover:text-purple-400 transition-colors">Contact</a>
+            </div>
+            
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-white focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden w-full mt-2 py-2 bg-darker-purple rounded-lg">
+            <div class="flex flex-col space-y-3 px-4">
+                <a href="#home" class="py-2 hover:text-purple-400 transition-colors">Home</a>
+                <a href="#services" class="py-2 hover:text-purple-400 transition-colors">Services</a>
+                <a href="#about" class="py-2 hover:text-purple-400 transition-colors">About</a>
+                <a href="#team" class="py-2 hover:text-purple-400 transition-colors">Team</a>
+                <a href="#contact" class="py-2 hover:text-purple-400 transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section with Video Background -->
+    <section id="home" class="hero-bg min-h-screen flex items-center pt-16">
+        <!-- Custom Digital Background Video -->
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/RAVI_%20%282%29-tDAdnq0CGA6V3SMG2gvQO785LCsUVt.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay"></div>
+        
+        <div class="container mx-auto px-4 py-20 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0" data-aos="fade-right" data-aos-duration="1000">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                        Transforming Ideas Into 
+                        <span class="gradient-text">Digital Reality</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-300 mb-8">
+                        We create innovative digital solutions that help businesses thrive in the modern world.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#contact" class="px-6 py-3 bg-dark-purple hover:bg-darker-purple rounded-lg transition-colors shadow-lg">
+                            Get Started
+                        </a>
+                        <a href="#services" class="px-6 py-3 border border-dark-green hover:bg-dark-green rounded-lg transition-colors">
+                            Our Services
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="relative w-80 h-80">
+                        <div class="absolute inset-0 bg-gradient-to-r from-dark-purple to-dark-green rounded-full opacity-30 animate-pulse"></div>
+                        <div class="absolute inset-4 bg-black rounded-full flex items-center justify-center">
+                            <i class="fas fa-brain text-8xl gradient-text"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section with Video Background -->
+    <section id="services" class="section-video-bg py-20 relative">
+        <!-- Video Background -->
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/RAVI_%20%281%29-Yq5JtWIiJqJcBGkB1F3gJEYIdLKn5j.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay bg-black bg-opacity-70"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our <span class="gradient-text">Services</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    We offer comprehensive digital solutions to help your business grow and succeed in the digital landscape.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Full-Stack Web Development -->
+                <div class="service-card rounded-xl p-6" data-aos="flip-left" data-aos-delay="100" onclick="openServiceModal('full-stack')">
+                    <div class="text-purple-400 text-4xl mb-4">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Full-Stack Web Development</h3>
+                    <p class="text-gray-400 mb-4">
+                        Complete web solutions using modern technologies for powerful, scalable applications.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Next.js & React.js
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Node.js & MongoDB
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            MERN Stack Applications
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Mobile App Development -->
+                <div class="service-card rounded-xl p-6" data-aos="flip-left" data-aos-delay="200" onclick="openServiceModal('mobile-app')">
+                    <div class="text-purple-400 text-4xl mb-4">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Mobile App Development</h3>
+                    <p class="text-gray-400 mb-4">
+                        Cross-platform mobile applications that deliver exceptional user experiences.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            React Native
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Flutter
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            iOS & Android Apps
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Python Development -->
+                <div class="service-card rounded-xl p-6" data-aos="flip-left" data-aos-delay="300" onclick="openServiceModal('python')">
+                    <div class="text-purple-400 text-4xl mb-4">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Python Development</h3>
+                    <p class="text-gray-400 mb-4">
+                        Powerful Python solutions for various business and technical needs.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            APIs & Microservices
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Automation Solutions
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Data Processing
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- WordPress Development -->
+                <div class="service-card rounded-xl p-6" data-aos="flip-left" data-aos-delay="400" onclick="openServiceModal('wordpress')">
+                    <div class="text-purple-400 text-4xl mb-4">
+                        <i class="fab fa-wordpress"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">WordPress Development</h3>
+                    <p class="text-gray-400 mb-4">
+                        Custom WordPress solutions for your business needs.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Custom Themes
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Plugin Development
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            E-commerce Solutions
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- UI/UX Design -->
+                <div class="service-card rounded-xl p-6" data-aos="flip-left" data-aos-delay="500" onclick="openServiceModal('ui-ux')">
+                    <div class="text-purple-400 text-4xl mb-4">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">UI/UX Design</h3>
+                    <p class="text-gray-400 mb-4">
+                        Beautiful and intuitive user interfaces that enhance user experience.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            User Research
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Wireframing
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Prototyping
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Digital Marketing -->
+                <div class="service-card rounded-xl p-6" data-aos="flip-left" data-aos-delay="600" onclick="openServiceModal('marketing')">
+                    <div class="text-purple-400 text-4xl mb-4">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Digital Marketing</h3>
+                    <p class="text-gray-400 mb-4">
+                        Comprehensive digital marketing solutions to grow your business.
+                    </p>
+                    <ul class="text-gray-400 space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            SEO Optimization
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Social Media Marketing
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            Content Strategy
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Modal -->
+    <div id="serviceModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-gray-800 p-8 rounded-xl max-w-2xl w-full mx-4 relative transform transition-all">
+            <button onclick="closeServiceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <!-- Full Stack Development Modal Content -->
+            <div id="full-stack-content" class="modal-content hidden">
+                <h2 class="text-3xl font-bold mb-6 text-purple-400">Full-Stack Web Development</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Technologies We Use</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-react text-blue-400"></i>
+                                <span>React.js</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-node text-green-400"></i>
+                                <span>Node.js</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fas fa-database text-yellow-400"></i>
+                                <span>MongoDB</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-js text-yellow-300"></i>
+                                <span>JavaScript</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Services Included</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Custom Web Application Development</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>API Development & Integration</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Database Design & Optimization</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Performance Optimization & Scaling</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile App Development Modal Content -->
+            <div id="mobile-app-content" class="modal-content hidden">
+                <h2 class="text-3xl font-bold mb-6 text-purple-400">Mobile App Development</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Technologies We Use</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-react text-blue-400"></i>
+                                <span>React Native</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-android text-green-400"></i>
+                                <span>Android</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-apple text-gray-300"></i>
+                                <span>iOS</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fas fa-mobile-alt text-blue-300"></i>
+                                <span>Flutter</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Services Included</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Native & Cross-platform Development</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>UI/UX Design for Mobile</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>App Store Optimization</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Maintenance & Support</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Python Development Modal Content -->
+            <div id="python-content" class="modal-content hidden">
+                <h2 class="text-3xl font-bold mb-6 text-purple-400">Python Development</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Technologies We Use</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-python text-blue-400"></i>
+                                <span>Django</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-python text-green-400"></i>
+                                <span>Flask</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fas fa-brain text-yellow-400"></i>
+                                <span>Machine Learning</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fas fa-robot text-purple-400"></i>
+                                <span>AI Solutions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Services Included</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Web Applications with Django/Flask</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Data Analysis & Visualization</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Machine Learning Solutions</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Process Automation</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WordPress Development Modal Content -->
+            <div id="wordpress-content" class="modal-content hidden">
+                <h2 class="text-3xl font-bold mb-6 text-purple-400">WordPress Development</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Technologies We Use</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-wordpress text-blue-400"></i>
+                                <span>WordPress</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-php text-purple-400"></i>
+                                <span>PHP</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-css3 text-blue-400"></i>
+                                <span>CSS3</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-js text-yellow-300"></i>
+                                <span>JavaScript</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Services Included</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Custom Theme Development</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Plugin Development</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>WooCommerce Integration</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Performance Optimization</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UI/UX Design Modal Content -->
+            <div id="ui-ux-content" class="modal-content hidden">
+                <h2 class="text-3xl font-bold mb-6 text-purple-400">UI/UX Design</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Tools We Use</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-figma text-purple-400"></i>
+                                <span>Figma</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-adobe text-red-400"></i>
+                                <span>Adobe XD</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-sketch text-yellow-400"></i>
+                                <span>Sketch</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fas fa-pencil-ruler text-blue-400"></i>
+                                <span>Prototyping</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Services Included</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>User Research & Analysis</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Wireframing & Prototyping</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Visual Design</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>User Testing</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Digital Marketing Modal Content -->
+            <div id="marketing-content" class="modal-content hidden">
+                <h2 class="text-3xl font-bold mb-6 text-purple-400">Digital Marketing</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Platforms We Use</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-google text-blue-400"></i>
+                                <span>Google Ads</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-facebook text-blue-600"></i>
+                                <span>Facebook Ads</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-instagram text-pink-400"></i>
+                                <span>Instagram</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-gray-300">
+                                <i class="fab fa-linkedin text-blue-500"></i>
+                                <span>LinkedIn</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-white">Services Included</h3>
+                        <ul class="space-y-2">
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>SEO Optimization</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Social Media Marketing</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Content Marketing</span>
+                            </li>
+                            <li class="flex items-start text-gray-300">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Email Marketing</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- About Section with Video Background -->
+    <section id="about" class="section-video-bg py-20 relative">
+        <!-- Video Background -->
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/RAVI_%20%282%29-tDAdnq0CGA6V3SMG2gvQO785LCsUVt.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay bg-gradient-to-b from-black to-dark-purple bg-opacity-80"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0" data-aos="fade-right">
+                    <div class="relative">
+                        <div class="w-full h-80 bg-gradient-to-r from-dark-purple to-dark-green rounded-lg opacity-30"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-building text-8xl gradient-text"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 md:pl-10" data-aos="fade-left">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">About <span class="gradient-text">RaviNovus Tech</span></h2>
+                    <p class="text-gray-300 mb-6">
+                        RaviNovus Tech is a forward-thinking software company dedicated to delivering innovative digital solutions that help businesses thrive in today's competitive landscape.
+                    </p>
+                    <p class="text-gray-300 mb-6">
+                        Our team of experts combines technical expertise with creative thinking to develop custom solutions that address your unique business challenges.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-darker-purple bg-opacity-70 p-4 rounded-lg backdrop-blur-sm">
+                            <h3 class="font-bold text-xl mb-2">Our Mission</h3>
+                            <p class="text-gray-400">To empower businesses through innovative technology solutions.</p>
+                        </div>
+                        <div class="bg-darker-green bg-opacity-70 p-4 rounded-lg backdrop-blur-sm">
+                            <h3 class="font-bold text-xl mb-2">Our Vision</h3>
+                            <p class="text-gray-400">To be the leading digital transformation partner for businesses worldwide.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section with Video Background -->
+    <section id="team" class="section-video-bg py-20 relative">
+        <!-- Video Background -->
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src=" https://hebbkx1anhila5yf.public.blob.vercel-storage.com/RAVI_%20%281%29-Yq5JtWIiJqJcBGkB1F3gJEYIdLKn5j.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay bg-dark-purple bg-opacity-80"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our <span class="gradient-text">Leadership</span></h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">
+                    Meet the talented team behind RaviNovus Tech who are dedicated to bringing your vision to life.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- CEO -->
+                <div class="team-card card-3d rounded-xl overflow-hidden" data-aos="flip-left" data-aos-delay="100">
+                    <div class="flex justify-center pt-8">
+                        <div class="relative w-40 h-40 rounded-full overflow-hidden border-4 border-purple-500 team-image-container">
+                            <img src="SHAGUFTA2.jpeg" alt="Shagufta Sultana" class="w-full h-full object-cover team-image">
+                            <div class="absolute inset-0 bg-gradient-to-r from-dark-purple to-darker-purple opacity-30 team-image-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-bold mb-1">Shagufta Sultana</h3>
+                        <p class="text-purple-400 mb-4">Chief Executive Officer</p>
+                        <p class="text-gray-400 mb-4">
+                            Visionary leader with extensive experience in technology and business strategy.
+                        </p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors social-icon">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors social-icon">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Manager -->
+                <div class="team-card card-3d rounded-xl overflow-hidden" data-aos="flip-up" data-aos-delay="200">
+                    <div class="flex justify-center pt-8">
+                        <div class="relative w-40 h-40 rounded-full overflow-hidden border-4 border-green-500 team-image-container">
+                            <img src=" WhatsApp Image 2025-03-23 at 9.38.42 PM.jpeg" alt="Abdullah" class="w-full h-full object-cover team-image">
+                            <div class="absolute inset-0 bg-gradient-to-r from-dark-green to-darker-green opacity-30 team-image-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-bold mb-1">Abdullah Abid</h3>
+                        <p class="text-green-400 mb-4">Manager</p>
+                        <p class="text-gray-400 mb-4">
+                            Experienced manager with a proven track record of successful project delivery.
+                        </p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-400 hover:text-green-400 transition-colors social-icon">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-green-400 transition-colors social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-green-400 transition-colors social-icon">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- BDO -->
+                <div class="team-card card-3d rounded-xl overflow-hidden" data-aos="flip-right" data-aos-delay="300">
+                    <div class="flex justify-center pt-8">
+                        <div class="relative w-40 h-40 rounded-full overflow-hidden border-4 border-purple-500 team-image-container">
+                            <img src="AMNA.jpeg" alt="Amna" class="w-full h-full object-cover team-image">
+                            <div class="absolute inset-0 bg-gradient-to-r from-darker-purple to-dark-purple opacity-30 team-image-overlay"></div>
+                        </div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-bold mb-1">Amna</h3>
+                        <p class="text-purple-400 mb-4">Business Development Officer</p>
+                        <p class="text-gray-400 mb-4">
+                            Strategic thinker focused on creating growth opportunities and partnerships.
+                        </p>
+                        <div class="flex justify-center space-x-3">
+                            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors social-icon">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors social-icon">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section with Video Background -->
+    <section id="contact" class="section-video-bg py-20 relative">
+        <!-- Video Background -->
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/RAVI_%20%282%29-tDAdnq0CGA6V3SMG2gvQO785LCsUVt.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay bg-gradient-to-b from-dark-purple to-black bg-opacity-80"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In <span class="gradient-text">Touch</span></h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">
+                    Ready to start your next project? Contact us today and let's discuss how we can help bring your vision to life.
+                </p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-10">
+                <div class="md:w-1/2" data-aos="fade-right">
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-gray-300 mb-2">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 bg-darker-purple bg-opacity-70 border border-dark-purple rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-300 mb-2">Email Address</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 bg-darker-purple bg-opacity-70 border border-dark-purple rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-gray-300 mb-2">Your Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 bg-darker-purple bg-opacity-70 border border-dark-purple rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 backdrop-blur-sm"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-dark-purple to-dark-green hover:opacity-90 rounded-lg transition-all">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="md:w-1/2" data-aos="fade-left">
+                    <div class="bg-darker-purple bg-opacity-70 p-8 rounded-lg h-full backdrop-blur-sm">
+                        <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="text-purple-400 text-xl mr-4">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Our Location</h4>
+                                    <p class="text-gray-400">Islamabad, Pakistan</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="text-purple-400 text-xl mr-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Email Us</h4>
+                                    <p class="text-gray-400"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="532132253a3d3c2526202736303b13343e323a3f7d303c3e">[email&#160;protected]</a></p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="text-purple-400 text-xl mr-4">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Call Us</h4>
+                                    <p class="text-gray-400">+92 318 0986017</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="text-purple-400 text-xl mr-4">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">WhatsApp</h4>
+                                    <p class="text-gray-400">
+                                        <a href="https://wa.me/923180986017" target="_blank" class="hover:text-purple-400 transition-colors">
+                                            +92 318 0986017
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-6">
+                                <h4 class="font-bold mb-3">Follow Us</h4>
+                                <div class="flex space-x-4">
+                                    <a href="#" class="w-10 h-10 rounded-full bg-dark-purple flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="#" class="w-10 h-10 rounded-full bg-dark-purple flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="#" class="w-10 h-10 rounded-full bg-dark-purple flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                    <a href="#" class="w-10 h-10 rounded-full bg-dark-purple flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- WhatsApp Contact Card -->
+            <div class="mt-16 bg-gradient-to-r from-dark-purple to-purple-900 rounded-xl p-8 shadow-lg backdrop-blur-sm" data-aos="fade-up">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="mb-6 md:mb-0">
+                        <h3 class="text-2xl font-bold mb-2">Need Quick Assistance?</h3>
+                        <p class="text-gray-300">Connect with us instantly on WhatsApp for immediate support and consultation.</p>
+                    </div>
+                    <a href="https://wa.me/923180986017" target="_blank" class="flex items-center gap-3 bg-[#25D366] hover:bg-[#20BA5C] text-white px-6 py-3 rounded-lg transition-all">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                        <span>Chat on WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-black py-16 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <!-- Main Footer Content -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                <!-- Company Info -->
+                <div>
+                    <h2 class="text-2xl font-bold mb-6">
+                        <span class="gradient-text">RaviNovus</span> Tech
+                    </h2>
+                    <p class="text-gray-400 mb-6">
+                        Transforming Ideas Into Digital Reality. We create innovative solutions that help businesses thrive in the digital landscape.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-purple flex items-center justify-center hover:bg-purple-700 transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-purple flex items-center justify-center hover:bg-purple-700 transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-purple flex items-center justify-center hover:bg-purple-700 transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-dark-purple flex items-center justify-center hover:bg-purple-700 transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6 relative">
+                        Quick Links
+                        <span class="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-dark-purple to-dark-green"></span>
+                    </h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Home</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Services</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> About Us</a></li>
+                        <li><a href="#team" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Our Team</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Careers</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Services -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6 relative">
+                        Our Services
+                        <span class="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-dark-purple to-dark-green"></span>
+                    </h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Full-Stack Web Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Mobile App Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> Python Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> WordPress & CMS Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> 3D Web Solutions</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> UI/UX & Graphic Design</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-400 transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-purple-500"></i> IT Consulting</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6 relative">
+                        Newsletter
+                        <span class="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-dark-purple to-dark-green"></span>
+                    </h3>
+                    <p class="text-gray-400 mb-4">
+                        Subscribe to our newsletter to receive updates on the latest technologies, offers, and news.
+                    </p>
+                    <form class="space-y-3">
+                        <div class="relative">
+                            <input type="email" placeholder="Your Email Address" class="w-full px-4 py-3 bg-darker-purple bg-opacity-70 border border-dark-purple rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 pr-12 backdrop-blur-sm">
+                            <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-dark-purple to-dark-green flex items-center justify-center hover:opacity-90">
+                                <i class="fas fa-paper-plane text-sm"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-start">
+                            <input type="checkbox" id="privacy-consent" class="mt-1 mr-2">
+                            <label for="privacy-consent" class="text-gray-500 text-sm">I agree to receive emails from RaviNovus Tech and accept the privacy policy.</label>
+                        </div>
+                    </form>
+                    
+                    <div class="mt-6">
+                        <h4 class="font-bold mb-3">Contact Info</h4>
+                        <div class="space-y-2">
+                            <p class="text-gray-400 flex items-center">
+                                <i class="fas fa-map-marker-alt text-purple-500 mr-3"></i> Islamabad, Pakistan
+                            </p>
+                            <p class="text-gray-400 flex items-center">
+                                <i class="fas fa-envelope text-purple-500 mr-3"></i> <a href="mailto:ravinovustech@gmail.com">ravinovustech@gmail.com</a>
+
+                            </p>
+                            <p class="text-gray-400 flex items-center">
+                                <i class="fas fa-phone-alt text-purple-500 mr-3"></i> +92 318 0986017
+                            </p>
+                            <p class="text-gray-400 flex items-center">
+                                <i class="fab fa-whatsapp text-purple-500 mr-3"></i> 
+                                <a href="https://wa.me/923180986017" target="_blank" class="hover:text-purple-400 transition-colors">
+                                    +92 318 0986017
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Footer -->
+            <div class="border-t border-gray-800 mt-12 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 mb-4 md:mb-0">
+                        &copy; 2025 RaviNovus Tech. All rights reserved.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="text-gray-500 hover:text-purple-400 transition-colors text-sm">Privacy Policy</a>
+                        <span class="text-gray-700">|</span>
+                        <a href="#" class="text-gray-500 hover:text-purple-400 transition-colors text-sm">Terms of Service</a>
+                        <span class="text-gray-700">|</span>
+                        <a href="#" class="text-gray-500 hover:text-purple-400 transition-colors text-sm">Cookie Policy</a>
+                        <span class="text-gray-700">|</span>
+                        <a href="#" class="text-gray-500 hover:text-purple-400 transition-colors text-sm">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Initialize AOS Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Mobile Menu Toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Initialize 3D Background
+            initThreeJS();
+        });
+        
+        // Three.js Background
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1000;
+            
+            const posArray = new Float32Array(particlesCount * 3);
+            
+            for(let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 10;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            // Materials
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0x9333ea,
+                transparent: true
+            });
+            
+            // Mesh
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                particlesMesh.rotation.x += 0.0005;
+                particlesMesh.rotation.y += 0.0005;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        // Card 3D Effect
+        document.querySelectorAll('.card-3d').forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const xRotation = ((y / rect.height) - 0.5) * 20;
+                const yRotation = ((x / rect.width) - 0.5) * -20;
+                
+                this.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) translateY(-10px)`;
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+        
+        // Team image hover animations
+        document.querySelectorAll('.team-image-container').forEach(container => {
+            container.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.05) rotate(5deg)';
+            });
+            
+            container.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+        
+        // Service Modal Functions
+        function openServiceModal(serviceId) {
+            const modal = document.getElementById('serviceModal');
+            const contents = document.querySelectorAll('.modal-content');
+            
+            contents.forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('active');
+            });
+            
+            const selectedContent = document.getElementById(`${serviceId}-content`);
+            if (selectedContent) {
+                selectedContent.classList.remove('hidden');
+                setTimeout(() => {
+                    selectedContent.classList.add('active');
+                }, 10);
+            }
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeServiceModal() {
+            const modal = document.getElementById('serviceModal');
+            const contents = document.querySelectorAll('.modal-content');
+            
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                contents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+            }, 200);
+            
+            document.body.style.overflow = 'auto';
+        }
+        
+        document.getElementById('serviceModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeServiceModal();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeServiceModal();
+            }
+        });
+    </script>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>RaviNovus Tech - Innovative Digital Solutions</title>
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- AOS Animation Library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+        <!-- Three.js for 3D effects -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <!-- GSAP for advanced animations -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        <!-- Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <!-- Vanilla-tilt.js for 3D card effects -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+        <!-- Lottie for JSON animations -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+        
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            'dark-purple': '#2D1B69',
+                            'darker-purple': '#1A103F',
+                            'dark-green': '#0F4C3A',
+                            'darker-green': '#0A3327'
+                        },
+                        animation: {
+                            'float': 'float 6s ease-in-out infinite',
+                            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                            'spin-slow': 'spin 8s linear infinite',
+                            'bounce-slow': 'bounce 3s infinite',
+                            'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+                            'morph': 'morph 8s ease-in-out infinite',
+                            'wave': 'wave 3s ease-in-out infinite',
+                            'shimmer': 'shimmer 2s linear infinite',
+                            'ripple': 'ripple 3s linear infinite',
+                            'glitch': 'glitch 5s steps(100) infinite'
+                        },
+                        keyframes: {
+                            float: {
+                                '0%, 100%': { transform: 'translateY(0)' },
+                                '50%': { transform: 'translateY(-20px)' },
+                            },
+                            morph: {
+                                '0%, 100%': { borderRadius: '60% 40% 30% 70%/60% 30% 70% 40%' },
+                                '50%': { borderRadius: '30% 60% 70% 40%/50% 60% 30% 60%' }
+                            },
+                            wave: {
+                                '0%': { transform: 'rotate(0deg)' },
+                                '10%': { transform: 'rotate(14deg)' },
+                                '20%': { transform: 'rotate(-8deg)' },
+                                '30%': { transform: 'rotate(14deg)' },
+                                '40%': { transform: 'rotate(-4deg)' },
+                                '50%': { transform: 'rotate(10deg)' },
+                                '60%': { transform: 'rotate(0deg)' },
+                                '100%': { transform: 'rotate(0deg)' }
+                            },
+                            shimmer: {
+                                '0%': { backgroundPosition: '-1000px 0' },
+                                '100%': { backgroundPosition: '1000px 0' }
+                            },
+                            ripple: {
+                                '0%': { transform: 'scale(0.8)', opacity: '1' },
+                                '100%': { transform: 'scale(2.4)', opacity: '0' }
+                            },
+                            glitch: {
+                                '0%': { clip: 'rect(44px, 450px, 56px, 0)' },
+                                '5%': { clip: 'rect(12px, 450px, 76px, 0)' },
+                                '10%': { clip: 'rect(42px, 450px, 73px, 0)' },
+                                '15%': { clip: 'rect(18px, 450px, 57px, 0)' },
+                                '20%': { clip: 'rect(79px, 450px, 83px, 0)' },
+                                '25%': { clip: 'rect(17px, 450px, 77px, 0)' },
+                                '30%': { clip: 'rect(36px, 450px, 53px, 0)' },
+                                '35%': { clip: 'rect(74px, 450px, 92px, 0)' },
+                                '40%': { clip: 'rect(89px, 450px, 99px, 0)' },
+                                '45%': { clip: 'rect(26px, 450px, 31px, 0)' },
+                                '50%': { clip: 'rect(14px, 450px, 56px, 0)' },
+                                '55%': { clip: 'rect(47px, 450px, 73px, 0)' },
+                                '60%': { clip: 'rect(63px, 450px, 78px, 0)' },
+                                '65%': { clip: 'rect(94px, 450px, 98px, 0)' },
+                                '70%': { clip: 'rect(37px, 450px, 49px, 0)' },
+                                '75%': { clip: 'rect(73px, 450px, 86px, 0)' },
+                                '80%': { clip: 'rect(15px, 450px, 29px, 0)' },
+                                '85%': { clip: 'rect(87px, 450px, 95px, 0)' },
+                                '90%': { clip: 'rect(9px, 450px, 17px, 0)' },
+                                '95%': { clip: 'rect(47px, 450px, 64px, 0)' },
+                                '100%': { clip: 'rect(84px, 450px, 92px, 0)' }
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+        
+        <style>
+            /* Base styles */
+            body {
+                background-color: #121212;
+                color: #f8f8f8;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            
+            /* Enhanced gradient text animation */
+            .gradient-text {
+                background: linear-gradient(90deg, #9333ea, #10b981, #6366f1, #9333ea);
+                background-size: 300% 100%;
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+                animation: gradient-shift 8s linear infinite;
+            }
+            
+            @keyframes gradient-shift {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            
+            /* Enhanced navigation gradient */
+            .nav-gradient {
+                background: linear-gradient(90deg, 
+                    rgba(45, 27, 105, 0.95), 
+                    rgba(15, 76, 58, 0.95),
+                    rgba(45, 27, 105, 0.95)
+                );
+                background-size: 200% 100%;
+                animation: nav-gradient 15s ease infinite;
+            }
+            
+            @keyframes nav-gradient {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            
+            /* Enhanced hero background */
+            .hero-bg {
+                background: radial-gradient(circle at center, 
+                    rgba(45, 27, 105, 0.7) 0%, 
+                    rgba(18, 18, 18, 0.7) 70%
+                );
+                position: relative;
+                overflow: hidden;
+                animation: bg-pulse 8s ease-in-out infinite;
+            }
+            
+            @keyframes bg-pulse {
+                0%, 100% { 
+                    background-size: 100% 100%;
+                    filter: hue-rotate(0deg);
+                }
+                50% { 
+                    background-size: 120% 120%;
+                    filter: hue-rotate(30deg);
+                }
+            }
+            
+            /* Enhanced video background */
+            .video-background {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: -2;
+                opacity: 0.6;
+                transform-origin: center;
+                animation: video-scale 20s ease-in-out infinite;
+                filter: saturate(1.2) contrast(1.1);
+            }
+            
+            @keyframes video-scale {
+                0%, 100% { 
+                    transform: scale(1) rotate(0deg);
+                    filter: saturate(1.2) contrast(1.1);
+                }
+                50% { 
+                    transform: scale(1.1) rotate(1deg);
+                    filter: saturate(1.4) contrast(1.2);
+                }
+            }
+            
+            /* Enhanced video overlay */
+            .video-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(18, 18, 18, 0.5);
+                z-index: -1;
+                backdrop-filter: blur(5px);
+                animation: overlay-opacity 8s ease-in-out infinite;
+            }
+            
+            @keyframes overlay-opacity {
+                0%, 100% { 
+                    opacity: 0.5;
+                    backdrop-filter: blur(5px);
+                }
+                50% { 
+                    opacity: 0.7;
+                    backdrop-filter: blur(7px);
+                }
+            }
+            
+            /* Enhanced 3D card effects */
+            .card-3d {
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-style: preserve-3d;
+                perspective: 1000px;
+            }
+            
+            .card-3d:hover {
+                transform: translateY(-10px) rotateX(10deg) rotateY(10deg) scale(1.05);
+                box-shadow: 
+                    0 20px 25px -5px rgba(0, 0, 0, 0.5),
+                    0 10px 10px -5px rgba(0, 0, 0, 0.5),
+                    0 0 20px rgba(147, 51, 234, 0.3),
+                    0 0 40px rgba(147, 51, 234, 0.2);
+            }
+            
+            /* Enhanced service cards */
+            .service-card {
+                background: rgba(26, 16, 63, 0.7);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                animation: card-pulse 4s ease-in-out infinite;
+                transform-style: preserve-3d;
+                perspective: 1000px;
+            }
+            
+            .service-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, 
+                    transparent 0%, 
+                    rgba(255, 255, 255, 0.1) 50%, 
+                    transparent 100%
+                );
+                transform: translateX(-100%);
+                animation: card-shimmer 3s infinite;
+            }
+            
+            @keyframes card-shimmer {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+            }
+            
+            .service-card:hover {
+                transform: translateY(-15px) scale(1.05) rotateX(10deg);
+                box-shadow: 
+                    0 25px 35px rgba(0, 0, 0, 0.5),
+                    0 0 30px rgba(147, 51, 234, 0.3),
+                    0 0 50px rgba(147, 51, 234, 0.2);
+                border-color: rgba(147, 51, 234, 0.5);
+            }
+            
+            /* Enhanced team cards */
+            .team-card {
+                background: rgba(10, 51, 39, 0.7);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-style: preserve-3d;
+                perspective: 1000px;
+                animation: team-card-float 6s ease-in-out infinite;
+            }
+            
+            @keyframes team-card-float {
+                0%, 100% { 
+                    transform: translateY(0) rotateX(0) rotateY(0);
+                    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+                }
+                50% { 
+                    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+                    box-shadow: 0 0 40px rgba(147, 51, 234, 0.5);
+                }
+            }
+            
+            .team-card:hover {
+                transform: translateY(-20px) rotateX(10deg) rotateY(10deg);
+                box-shadow: 
+                    0 30px 40px rgba(0, 0, 0, 0.5),
+                    0 0 40px rgba(147, 51, 234, 0.4),
+                    0 0 60px rgba(147, 51, 234, 0.2);
+            }
+            
+            /* Enhanced team image container */
+            .team-image-container {
+                transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 0 20px rgba(137, 66, 255, 0.5);
+                animation: image-glow 4s ease-in-out infinite;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .team-image-container::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(
+                    45deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3),
+                    transparent
+                );
+                transform: rotate(45deg);
+                animation: shine 3s infinite;
+            }
+            
+            @keyframes shine {
+                0% { transform: rotate(45deg) translateY(-100%); }
+                100% { transform: rotate(45deg) translateY(100%); }
+            }
+            
+            /* Enhanced social icons */
+            .social-icon {
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                animation: icon-float 3s ease-in-out infinite;
+                position: relative;
+            }
+            
+            .social-icon::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                background: rgba(147, 51, 234, 0.2);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                transition: all 0.3s ease;
+            }
+            
+            .social-icon:hover::before {
+                width: 40px;
+                height: 40px;
+                animation: ripple 1s infinite;
+            }
+            
+            @keyframes ripple {
+                0% { 
+                    transform: translate(-50%, -50%) scale(0.8);
+                    opacity: 1;
+                }
+                100% { 
+                    transform: translate(-50%, -50%) scale(2);
+                    opacity: 0;
+                }
+            }
+            
+            /* Enhanced button animations */
+            .animated-button {
+                position: relative;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                z-index: 1;
+            }
+            
+            .animated-button::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, 
+                    rgba(147, 51, 234, 0.2),
+                    rgba(16, 185, 129, 0.2)
+                );
+                transform: scaleX(0);
+                transform-origin: left;
+                transition: transform 0.3s ease;
+                z-index: -1;
+            }
+            
+            .animated-button:hover::before {
+                transform: scaleX(1);
+            }
+            
+            /* Enhanced input animations */
+            .animated-input {
+                transition: all 0.3s ease;
+                border: 2px solid transparent;
+                background: 
+                    linear-gradient(#121212, #121212) padding-box,
+                    linear-gradient(45deg, #9333ea, #10b981) border-box;
+            }
+            
+            .animated-input:focus {
+                background: 
+                    linear-gradient(#1a103f, #1a103f) padding-box,
+                    linear-gradient(45deg, #10b981, #9333ea) border-box;
+                box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
+            }
+            
+            /* Enhanced scroll animations */
+            .scroll-animate {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .scroll-animate.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            /* Enhanced loading animations */
+            .loading-animation {
+                width: 50px;
+                height: 50px;
+                border: 3px solid rgba(147, 51, 234, 0.3);
+                border-radius: 50%;
+                border-top-color: #9333ea;
+                animation: spin 1s ease-in-out infinite;
+            }
+            
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+            
+            /* Enhanced hover effects */
+            .hover-glow {
+                transition: all 0.3s ease;
+            }
+            
+            .hover-glow:hover {
+                box-shadow: 
+                    0 0 10px rgba(147, 51, 234, 0.3),
+                    0 0 20px rgba(147, 51, 234, 0.2),
+                    0 0 30px rgba(147, 51, 234, 0.1);
+            }
+            
+            /* Enhanced particle effects */
+            .particle {
+                position: absolute;
+                pointer-events: none;
+                animation: particle-float 6s ease-in-out infinite;
+                filter: blur(1px);
+                mix-blend-mode: screen;
+            }
+            
+            @keyframes particle-float {
+                0%, 100% {
+                    transform: translate(0, 0) rotate(0deg) scale(1);
+                    opacity: 0.6;
+                }
+                25% {
+                    transform: translate(50px, -50px) rotate(90deg) scale(1.2);
+                    opacity: 0.8;
+                }
+                50% {
+                    transform: translate(100px, 0) rotate(180deg) scale(1);
+                    opacity: 0.6;
+                }
+                75% {
+                    transform: translate(50px, 50px) rotate(270deg) scale(1.2);
+                    opacity: 0.8;
+                }
+            }
+            
+            /* Enhanced modal animations */
+            .modal {
+                transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                backdrop-filter: blur(10px);
+                animation: modal-fade 0.3s ease-out;
+            }
+            
+            @keyframes modal-fade {
+                from { 
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
+                to { 
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+            
+            /* Enhanced text animations */
+            .text-glitch {
+                position: relative;
+                animation: glitch 3s steps(100) infinite;
+            }
+            
+            @keyframes glitch {
+                0% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
+                25% { text-shadow: -2px 0 0 red, 2px 0 0 blue; }
+                50% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
+                75% { text-shadow: -2px 0 0 red, 2px 0 0 blue; }
+                100% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
+            }
+            
+            /* Enhanced scroll indicator */
+            .scroll-indicator {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 30px;
+                height: 50px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 15px;
+                animation: scroll-bounce 2s infinite;
+            }
+            
+            .scroll-indicator::before {
+                content: '';
+                position: absolute;
+                top: 8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 6px;
+                height: 6px;
+                background: white;
+                border-radius: 50%;
+                animation: scroll-wheel 2s infinite;
+            }
+            
+            @keyframes scroll-bounce {
+                0%, 100% { transform: translateX(-50%) translateY(0); }
+                50% { transform: translateX(-50%) translateY(10px); }
+            }
+            
+            @keyframes scroll-wheel {
+                0% { 
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+                100% { 
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(20px);
+                }
+            }
+            
+            /* Enhanced progress bar */
+            .progress-bar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 3px;
+                background: linear-gradient(90deg, #9333ea, #10b981);
+                transform-origin: 0 50%;
+                transition: transform 0.2s ease;
+            }
+            
+            /* Enhanced cursor effects */
+            .custom-cursor {
+                width: 20px;
+                height: 20px;
+                border: 2px solid rgba(147, 51, 234, 0.5);
+                border-radius: 50%;
+                position: fixed;
+                pointer-events: none;
+                z-index: 9999;
+                mix-blend-mode: difference;
+                transition: all 0.1s ease;
+            }
+            
+            .custom-cursor.active {
+                transform: scale(2);
+                background: rgba(147, 51, 234, 0.1);
+            }
+            
+            /* Enhanced section transitions */
+            .section-transition {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .section-transition.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            /* Enhanced image hover effects */
+            .image-hover {
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .image-hover::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, 
+                    rgba(147, 51, 234, 0.2),
+                    rgba(16, 185, 129, 0.2)
+                );
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+            
+            .image-hover:hover::after {
+                opacity: 1;
+            }
+            
+            /* Enhanced loading skeleton */
+            .skeleton {
+                background: linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.1),
+                    rgba(255, 255, 255, 0.2),
+                    rgba(255, 255, 255, 0.1)
+                );
+                background-size: 200% 100%;
+                animation: skeleton-loading 1.5s infinite;
+            }
+            
+            @keyframes skeleton-loading {
+                0% { background-position: 200% 0; }
+                100% { background-position: -200% 0; }
+            }
+        </style>
+    </head>
+    <body class="min-h-screen">
+        <!-- Existing body content remains unchanged -->
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize AOS with enhanced settings
+                AOS.init({
+                    duration: 1500,
+                    easing: 'ease-in-out',
+                    mirror: true,
+                    once: false,
+                    offset: 100,
+                    delay: 100,
+                    anchorPlacement: 'center-bottom'
+                });
+                
+                // Re-trigger AOS animations
+                setInterval(() => {
+                    AOS.refresh();
+                }, 2000);
+                
+                // Initialize Vanilla-tilt with enhanced settings
+                VanillaTilt.init(document.querySelectorAll(".service-card"), {
+                    max: 25,
+                    speed: 400,
+                    glare: true,
+                    "max-glare": 0.5,
+                    scale: 1.05,
+                    transition: true,
+                    easing: "cubic-bezier(.03,.98,.52,.99)",
+                    perspective: 1000
+                });
+                
+                // Create enhanced particles
+                createEnhancedParticles();
+                
+                // Initialize GSAP animations
+                initEnhancedGSAPAnimations();
+                
+                // Initialize Three.js background
+                initEnhancedThreeJS();
+                
+                // Initialize custom cursor
+                initCustomCursor();
+                
+                // Initialize scroll progress
+                initScrollProgress();
+                
+                // Initialize section transitions
+                initSectionTransitions();
+            });
+            
+            function createEnhancedParticles() {
+                const container = document.body;
+                const particleCount = 30;
+                const colors = ['#9333ea', '#10b981', '#6366f1'];
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.width = `${Math.random() * 10 + 5}px`;
+                    particle.style.height = particle.style.width;
+                    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.borderRadius = '50%';
+                    particle.style.left = `${Math.random() * 100}vw`;
+                    particle.style.top = `${Math.random() * 100}vh`;
+                    particle.style.animationDelay = `${Math.random() * 4}s`;
+                    particle.style.animationDuration = `${Math.random() * 4 + 4}s`;
+                    container.appendChild(particle);
+                }
+            }
+            
+            function initEnhancedGSAPAnimations() {
+                // Service cards animation
+                gsap.to('.service-card', {
+                    y: -20,
+                    duration: 2,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: "power1.inOut",
+                    stagger: {
+                        amount: 1.5,
+                        from: "random"
+                    }
+                });
+                
+                // Gradient text animation
+                gsap.to('.gradient-text', {
+                    backgroundPosition: '200% center',
+                    duration: 8,
+                    repeat: -1,
+                    ease: "none"
+                });
+                
+                // Team cards animation
+                gsap.to('.team-card', {
+                    rotateX: 5,
+                    rotateY: 5,
+                    duration: 3,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: "power1.inOut",
+                    stagger: {
+                        amount: 1
+                    }
+                });
+            }
+            
+            function initEnhancedThreeJS() {
+                const container = document.getElementById('canvas-container');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ 
+                    alpha: true,
+                    antialias: true
+                });
+                
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                container.appendChild(renderer.domElement);
+                
+                // Create multiple particle systems
+                const particleSystems = [];
+                const colors = [0x9333ea, 0x10b981, 0x6366f1];
+                
+                colors.forEach((color, index) => {
+                    const geometry = new THREE.BufferGeometry();
+                    const vertices = [];
+                    
+                    for (let i = 0; i < 2000; i++) {
+                        vertices.push(
+                            (Math.random() - 0.5) * 15,
+                            (Math.random() - 0.5) * 15,
+                            (Math.random() - 0.5) * 15
+                        );
+                    }
+                    
+                    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                    
+                    const material = new THREE.PointsMaterial({
+                        size: 0.05,
+                        color: color,
+                        transparent: true,
+                        opacity: 0.6,
+                        blending: THREE.AdditiveBlending,
+                        sizeAttenuation: true
+                    });
+                    
+                    const system = new THREE.Points(geometry, material);
+                    system.rotation.x = Math.random() * Math.PI;
+                    system.rotation.y = Math.random() * Math.PI;
+                    
+                    particleSystems.push(system);
+                    scene.add(system);
+                });
+                
+                camera.position.z = 5;
+                
+                // Animation loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    
+                    particleSystems.forEach((system, index) => {
+                        system.rotation.x += 0.0005 * (index + 1);
+                        system.rotation.y += 0.0005 * (index + 1);
+                        system.position.y = Math.sin(Date.now() * 0.001 + index) * 0.2;
+                    });
+                    
+                    renderer.render(scene, camera);
+                }
+                
+                animate();
+                
+                // Window resize handler
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    renderer.setPixelRatio(window.devicePixelRatio);
+                });
+                
+                // Mouse interaction
+                let mouseX = 0;
+                let mouseY = 0;
+                
+                document.addEventListener('mousemove', (event) => {
+                    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                    
+                    particleSystems.forEach((system, index) => {
+                        gsap.to(system.rotation, {
+                            x: mouseY * 0.5 + Math.sin(Date.now() * 0.001) * 0.2,
+                            y: mouseX * 0.5 + Math.cos(Date.now() * 0.001) * 0.2,
+                            duration: 2,
+                            ease: "power2.out"
+                        });
+                    });
+                });
+            }
+            
+            function initCustomCursor() {
+                const cursor = document.createElement('div');
+                cursor.className = 'custom-cursor';
+                document.body.appendChild(cursor);
+                
+                document.addEventListener('mousemove', (e) => {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                });
+                
+                document.addEventListener('mousedown', () => {
+                    cursor.classList.add('active');
+                });
+                
+                document.addEventListener('mouseup', () => {
+                    cursor.classList.remove('active');
+                });
+            }
+            
+            function initScrollProgress() {
+                const progressBar = document.createElement('div');
+                progressBar.className = 'progress-bar';
+                document.body.appendChild(progressBar);
+                
+                window.addEventListener('scroll', () => {
+                    const scrolled = window.scrollY;
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = (scrolled / maxScroll) * 100;
+                    progressBar.style.transform = `scaleX(${progress}%)`;
+                });
+            }
+            
+            function initSectionTransitions() {
+                const sections = document.querySelectorAll('.section-transition');
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, {
+                    threshold: 0.1
+                });
+                
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+            }
+        </script>
+    </body>
+    </html>
+</body>
+</html>
